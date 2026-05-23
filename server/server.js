@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
+
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
@@ -20,20 +19,10 @@ app.use("/api/qr", qrRoutes);
 app.use("/api/contact", contactRoutes);
 app.get("/r/:slug", redirectDynamic);
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const clientDist = path.join(__dirname, "..", "client", "dist");
+
 
 app.use(express.static(clientDist));
 
-// Fallback: serve index.html for any non-API GET request (avoids path-to-regexp wildcard parsing)
-app.use((req, res, next) => {
-    if (req.method !== "GET") return next();
-    if (req.path.startsWith("/api") || req.path.startsWith("/r/")) return next();
-    const indexPath = path.join(clientDist, "index.html");
-    res.sendFile(indexPath, (err) => {
-        if (err) return next(err);
-    });
-});
 
 app.get("/", (req, res) => {
     res.send("QRVerse backend running. Use the frontend on the client dev server or build + serve the static site.");
