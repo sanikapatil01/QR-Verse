@@ -21,8 +21,6 @@ app.get("/r/:slug", redirectDynamic);
 
 
 
-app.use(express.static(clientDist));
-
 
 app.get("/", (req, res) => {
     res.send("QRVerse backend running. Use the frontend on the client dev server or build + serve the static site.");
